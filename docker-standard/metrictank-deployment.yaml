@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.7.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: metrictank
+  name: metrictank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: metrictank
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: metrictank
+    spec:
+      containers:
+      - env:
+        - name: MT_HTTP_MULTI_TENANT
+          value: "false"
+        - name: WAIT_HOSTS
+          value: cassandra:9042
+        - name: WAIT_TIMEOUT
+          value: "60"
+        image: grafana/metrictank
+        name: metrictank
+        ports:
+        - containerPort: 6060
+        - containerPort: 2003
+        resources: {}
+      restartPolicy: Always
+status: {}

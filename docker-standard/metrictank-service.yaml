@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.7.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: metrictank
+  name: metrictank
+spec:
+  ports:
+  - name: "6060"
+    port: 6060
+    targetPort: 6060
+  - name: "2003"
+    port: 2003
+    targetPort: 2003
+  selector:
+    io.kompose.service: metrictank
+status:
+  loadBalancer: {}

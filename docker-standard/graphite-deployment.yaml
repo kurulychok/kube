@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.7.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: graphite
+  name: graphite
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: graphite
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: graphite
+    spec:
+      containers:
+      - env:
+        - name: GRAPHITE_CLUSTER_SERVERS
+          value: metrictank:6060
+        - name: GRAPHITE_STATSD_HOST
+          value: statsdaemon
+        - name: WSGI_PROCESSES
+          value: "4"
+        - name: WSGI_THREADS
+          value: "25"
+        image: raintank/graphite-mt
+        name: graphite
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}
